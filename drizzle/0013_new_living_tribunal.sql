@@ -1,0 +1,1 @@
+ALTER TABLE `adViews` MODIFY COLUMN `adId` int;

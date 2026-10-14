@@ -1,0 +1,1 @@
+ALTER TABLE `referralRewards` ADD CONSTRAINT `referralRewards_referred_user_unique` UNIQUE(`referredUserId`);

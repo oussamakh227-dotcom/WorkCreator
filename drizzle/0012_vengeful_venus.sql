@@ -1,0 +1,1 @@
+ALTER TABLE `surveyResponses` ADD CONSTRAINT `surveyResponses_user_survey_unique` UNIQUE(`userId`,`surveyId`);
