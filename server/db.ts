@@ -38,8 +38,8 @@ import {
   posts,
   comments,
   likes,
-} from "../drizzle/schema";
-import { ENV } from "./_core/env";
+} from "../drizzle/schema.ts";
+import { ENV } from "./_core/env.ts";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
