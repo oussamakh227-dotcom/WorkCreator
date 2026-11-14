@@ -1,4 +1,4 @@
-import { invokeLLM } from "./llm";
+import { invokeLLM } from "./llm.ts";
 
 export interface TaskSummaryRequest {
   surveyTitle: string;
