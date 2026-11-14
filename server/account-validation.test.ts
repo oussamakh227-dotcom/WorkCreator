@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest.ts";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { TrpcContext } from "./_core/context.ts";
 
 const dbMock = vi.hoisted(() => ({
