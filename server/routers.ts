@@ -1,11 +1,11 @@
-import { COOKIE_NAME } from "@shared/const";
-import { getSessionCookieOptions } from "./_core/cookies";
-import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { COOKIE_NAME } from "../shared/const.ts";
+import { getSessionCookieOptions } from "./_core/cookies.ts";
+import { systemRouter } from "./_core/systemRouter.ts";
+import { publicProcedure, protectedProcedure, router } from "./_core/trpc.ts";
 import { z } from "zod";
-import * as db from "./db";
+import * as db from "./db.ts";
 import { TRPCError } from "@trpc/server";
-import { aiSummarizerRouter } from "./routers/aiSummarizer";
+import { aiSummarizerRouter } from "./routers/aiSummarizer.ts";
 
 // Helper function to create admin-only procedure
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
