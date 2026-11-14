@@ -10,39 +10,29 @@ function isIpAddress(host: string) {
 
 function isSecureRequest(req: Request) {
   if (req.protocol === "https") return true;
-
+  
   const forwardedProto = req.headers["x-forwarded-proto"];
-  if (!forwardedProto) return false;
+  if (forwardedProto) {
+    const protos = Array.isArray(forwardedProto) ? forwardedProto : forwardedProto.split(",");
+    if (protos.some((p) => p.trim() === "https")) return true;
+  }
 
-  const protoList = Array.isArray(forwardedProto)
-    ? forwardedProto
-    : forwardedProto.split(",");
+  const host = req.headers.host?.split(":")[0];
+  if (!host) return false;
 
-  return protoList.some(proto => proto.trim().toLowerCase() === "https");
+  if (LOCAL_HOSTS.has(host) || isIpAddress(host)) {
+    return false;
+  }
+
+  return true;
 }
 
-export function getSessionCookieOptions(
-  req: Request
-): Pick<CookieOptions, "domain" | "httpOnly" | "path" | "sameSite" | "secure"> {
-  // const hostname = req.hostname;
-  // const shouldSetDomain =
-  //   hostname &&
-  //   !LOCAL_HOSTS.has(hostname) &&
-  //   !isIpAddress(hostname) &&
-  //   hostname !== "127.0.0.1" &&
-  //   hostname !== "::1";
-
-  // const domain =
-  //   shouldSetDomain && !hostname.startsWith(".")
-  //     ? `.${hostname}`
-  //     : shouldSetDomain
-  //       ? hostname
-  //       : undefined;
-
+export function getSessionCookieOptions(req: Request): CookieOptions {
+  const secure = isSecureRequest(req);
   return {
     httpOnly: true,
+    secure,
+    sameSite: secure ? "none" : "lax",
     path: "/",
-    sameSite: "none",
-    secure: isSecureRequest(req),
   };
 }
