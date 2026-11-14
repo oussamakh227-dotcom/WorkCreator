@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { TrpcContext } from "./_core/context";
+import { beforeEach, describe, expect, it, vi } from "vitest.ts";
+import type { TrpcContext } from "./_core/context.ts";
 
 const dbMock = vi.hoisted(() => ({
   getUserByContact: vi.fn(),
@@ -10,7 +10,7 @@ const dbMock = vi.hoisted(() => ({
 
 vi.mock("./db", () => dbMock);
 
-import { appRouter } from "./routers";
+import { appRouter } from "./routers.ts";
 
 type AuthenticatedUser = NonNullable<TrpcContext["user"]>;
 
