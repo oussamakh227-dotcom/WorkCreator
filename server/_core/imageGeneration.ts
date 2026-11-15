@@ -1,14 +1,61 @@
 /**
- * Image generation helper using internal ImageService
- *
+ * Image generation helper using Deno/LLM services
+ * 
  * Example usage:
- *   const { url: imageUrl } = await generateImage({
- *     prompt: "A serene landscape with mountains"
- *   });
- *
+ * const { url : imageUrl } = await generateImage({
+ *   prompt : "A serene landscape with mountains"
+ * });
+ * 
  * For editing:
- *   const { url: imageUrl } = await generateImage({
- *     prompt: "Add a rainbow to this landscape",
+ * const { url : imageUrl } = await generateImage({
+ *   prompt : "Add a rainbow to this landscape",
+ *   originalImages : [{
+ *     url : "https://example.com/original.jpg",
+ *     mimeType : "image/jpeg"
+ *   }]
+ * });
+ */
+
+import { storagePut } from "../storage.ts";
+import { ENV } from "./env.ts";
+
+export type GenerateImageOptions = {
+  prompt: string;
+  originalImages?: Array<{
+    url?: string;
+    b64Json?: string;
+    mimeType?: string;
+  }>;
+};
+
+export async function generateImage(options: GenerateImageOptions): Promise<{ url: string }> {
+  // Call Image Generation API or Deno backend service
+  const response = await fetch(${ENV.forgeApiUrl || "https://api.openai.com/v1"}/images/generations, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": Bearer ${ENV.forgeApiKey || ""},
+    },
+    body: JSON.stringify({
+      prompt: options.prompt,
+      n: 1,
+      size: "1024x1024",
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(Image generation failed: ${response.statusText});
+  }
+
+  const data = await response.json();
+  const imageUrl = data.data?.[0]?.url;
+
+  if (!imageUrl) {
+    throw new Error("No image URL returned from generation service.");
+  }
+
+  return { url: imageUrl };
+} rainbow to this landscape",
  *     originalImages: [{
  *       url: "https://example.com/original.jpg",
  *       mimeType: "image/jpeg"
